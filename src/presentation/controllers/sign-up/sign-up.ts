@@ -4,6 +4,7 @@ export class SignUpController {
         for (const field of requireParams) {
             if (!httpRequest.body[field]) {
                 return {
+                    body: new Error(`missing param: ${field}`),
                     statusCode: 400
                 };
             }
