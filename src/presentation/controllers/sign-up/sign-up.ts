@@ -1,3 +1,4 @@
+import { InvalidParamException } from "../../exceptions/invalid-param-exceptions";
 import { MissingParamException } from "../../exceptions/missing-param-exception";
 import { badRequest, ok } from "../../helpers/http-helper";
 import { Controller } from "../../protocols/controller";
@@ -10,6 +11,9 @@ export class SignUpController implements Controller {
             if (!httpRequest.body[field]) {
                 return badRequest(new MissingParamException(field));
             }
+        }
+        if (httpRequest.body.password !== httpRequest.body.password_confirmation) {
+            return badRequest(new InvalidParamException('password_confirmation'));
         }
         return ok();
     }
