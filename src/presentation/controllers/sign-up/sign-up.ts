@@ -1,18 +1,14 @@
 import { MissingParamException } from "../../exceptions/missing-param-exception";
+import { badRequest, ok } from "../../helpers/http-helper";
 
 export class SignUpController {
     handle(httpRequest: any): any{
         const requireParams = ['name', 'email', 'password'];
         for (const field of requireParams) {
             if (!httpRequest.body[field]) {
-                return {
-                    body: new MissingParamException(field),
-                    statusCode: 400
-                };
+                return badRequest(new MissingParamException(field));
             }
         }
-        return {
-            statusCode: 200
-        };
+        return ok();
     }
 }
