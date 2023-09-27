@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1695824006300" clover="3.2.0">
-  <project timestamp="1695824006300" name="All files">
+<coverage generated="1695854526053" clover="3.2.0">
+  <project timestamp="1695854526066" name="All files">
     <metrics statements="6" coveredstatements="5" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1" elements="8" coveredelements="7" complexity="0" loc="6" ncloc="6" packages="1" files="1" classes="1"/>
     <file name="sign-up.ts" path="C:\Users\LENOVO\Documents\estudos\src\presentation\controllers\sign-up\sign-up.ts">
       <metrics statements="6" coveredstatements="5" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1"/>
