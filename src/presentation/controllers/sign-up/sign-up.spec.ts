@@ -1,3 +1,5 @@
+import { AccountModel } from "../../../domain/models/account-model";
+import { AddAccount, AddAccountModel } from "../../../domain/usecases/add-account";
 import { InternalServerException } from "../../exceptions/internal-server-exception";
 import { InvalidParamException } from "../../exceptions/invalid-param-exceptions";
 import { MissingParamException } from "../../exceptions/missing-param-exception";
@@ -10,11 +12,24 @@ class EmailValidatorStub implements EmailValidator {
   }
 }
 
+class AddAccountStub implements AddAccount {
+  add(account: AddAccountModel): AccountModel {
+    return {
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'valid_password'
+    };
+  }
+}
+
 const makeSut = () => {
+  const addAccountStub = new AddAccountStub();
   const emailValidatorStub = new EmailValidatorStub();
-  const sut = new SignUpController(emailValidatorStub);
+  const sut = new SignUpController(emailValidatorStub, addAccountStub);
   return {
     emailValidatorStub,
+    addAccountStub,
     sut
   }
 }
@@ -72,8 +87,7 @@ describe('SignUp Controller', () => {
     expect(httpResponse.body).toEqual(new MissingParamException('password_confirmation'));
   });
   test('Should returns 400 if password_confirmation is invalid', () => {
-    const emailValidatorStub = new EmailValidatorStub();
-    const sut = new SignUpController(emailValidatorStub);
+    const { sut } = makeSut();
     const httpRequest = {
         body: {
             name: 'any_name',
@@ -131,5 +145,23 @@ describe('SignUp Controller', () => {
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.statusCode).toBe(500);
     expect(httpResponse.body).toEqual(new InternalServerException());
+  });
+  test('Should returns an error if SignUpController calls AddAccount with incorrect values', () => {
+    const { sut, addAccountStub } = makeSut();
+    const spy = jest.spyOn(addAccountStub, 'add');
+    const httpRequest = {
+        body: {
+            name: 'any_name',
+            email: 'invalid_email',
+            password: 'any_password',
+            password_confirmation: 'any_password'
+        }
+    };
+    sut.handle(httpRequest);
+    expect(spy).toHaveBeenCalledWith({
+      name: 'any_name',
+      email: 'invalid_email',
+      password: 'any_password'
+    });
   });
 });
