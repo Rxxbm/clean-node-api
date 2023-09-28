@@ -1,3 +1,5 @@
+import { InternalServerException } from "../exceptions/internal-server-exception";
+
 export const badRequest = (error: Error) => {
     return{
         body: error,
@@ -11,3 +13,10 @@ export const ok = (body?: any) => {
         statusCode: 200
     }
 };
+
+export const serverError = () => {
+    return {
+        body: new InternalServerException(),
+        statusCode: 500
+    }
+}
