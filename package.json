@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose --coverage --detectOpenHandles"
+    "test": "jest --verbose --coverage --detectOpenHandles",
+    "test:unit": "jest --silent"
   },
   "keywords": [],
   "author": "",
