@@ -8,7 +8,7 @@ import { HttpRequest, HttpResponse } from "../../protocols/http";
 
 export class SignUpController implements Controller {
     constructor(private readonly emailValidator: EmailValidator, private readonly addAccount: AddAccount){}
-    handle(httpRequest: HttpRequest): HttpResponse{
+    async handle(httpRequest: HttpRequest): Promise<HttpResponse>{
         try{
             const requireParams = ['name', 'email', 'password', 'password_confirmation'];
             for (const field of requireParams) {
@@ -20,7 +20,7 @@ export class SignUpController implements Controller {
             const isValidEmail = this.emailValidator.isValid(email)
             if(!isValidEmail) 
                 return badRequest(new InvalidParamException('email'));
-            const account = this.addAccount.add({email, name, password});
+            const account = await this.addAccount.add({email, name, password});
             return ok(account);
         }catch{
             return serverError();
