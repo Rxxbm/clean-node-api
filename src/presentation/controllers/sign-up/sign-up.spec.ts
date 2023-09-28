@@ -152,7 +152,7 @@ describe('SignUp Controller', () => {
     const httpRequest = {
         body: {
             name: 'any_name',
-            email: 'invalid_email',
+            email: 'any_email',
             password: 'any_password',
             password_confirmation: 'any_password'
         }
@@ -160,7 +160,7 @@ describe('SignUp Controller', () => {
     sut.handle(httpRequest);
     expect(spy).toHaveBeenCalledWith({
       name: 'any_name',
-      email: 'invalid_email',
+      email: 'any_email',
       password: 'any_password'
     });
   });
@@ -172,7 +172,7 @@ describe('SignUp Controller', () => {
     const httpRequest = {
         body: {
             name: 'any_name',
-            email: 'invalid_email',
+            email: 'any_email',
             password: 'any_password',
             password_confirmation: 'any_password'
         }
@@ -180,5 +180,24 @@ describe('SignUp Controller', () => {
     const httpResponse = sut.handle(httpRequest);
     expect(httpResponse.body).toEqual(new InternalServerException());
     expect(httpResponse.statusCode).toBe(500);
+  });
+  test('Should returns account on success', () => {
+    const { sut } = makeSut();
+    const httpRequest = {
+        body: {
+            name: 'any_name',
+            email: 'any_email',
+            password: 'any_password',
+            password_confirmation: 'any_password'
+        }
+    };
+    const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.body).toEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'valid_password'
+    });
+    expect(httpResponse.statusCode).toBe(200);
   });
 });
