@@ -12,16 +12,15 @@ export class SignUpController implements Controller {
         try{
             const requireParams = ['name', 'email', 'password', 'password_confirmation'];
             for (const field of requireParams) {
-                if (!httpRequest.body[field]) {
-                    return badRequest(new MissingParamException(field));
-                }
+                if (!httpRequest.body[field]) return badRequest(new MissingParamException(field));
             }
-            if (httpRequest.body.password !== httpRequest.body.password_confirmation) {
+            const {email, password, password_confirmation, name} = httpRequest.body;
+            if (password !== password_confirmation) 
                 return badRequest(new InvalidParamException('password_confirmation'));
-            }
-            const isValidEmail = this.emailValidator.isValid(httpRequest.body.email);
-            if(!isValidEmail) return badRequest(new InvalidParamException('email'));
-            const account = this.addAccount.add({email: httpRequest.body.email, name: httpRequest.body.name, password: httpRequest.body.password});
+            const isValidEmail = this.emailValidator.isValid(email)
+            if(!isValidEmail) 
+                return badRequest(new InvalidParamException('email'));
+            const account = this.addAccount.add({email, name, password});
             return ok(account);
         }catch{
             return serverError();
