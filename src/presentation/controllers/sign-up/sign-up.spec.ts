@@ -1,3 +1,4 @@
+import { InternalServerException } from "../../exceptions/internal-server-exception";
 import { InvalidParamException } from "../../exceptions/invalid-param-exceptions";
 import { MissingParamException } from "../../exceptions/missing-param-exception";
 import { EmailValidator } from "../../protocols/email-validator";
@@ -113,5 +114,22 @@ describe('SignUp Controller', () => {
     };
     sut.handle(httpRequest);
     expect(spy).toHaveBeenCalledWith(httpRequest.body.email);
+  });
+  test('Should returns 500 if EmailValidator throws', () => {
+    const { sut, emailValidatorStub } = makeSut();
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce( () => {
+      throw new Error;
+    });
+    const httpRequest = {
+        body: {
+            name: 'any_name',
+            email: 'invalid_email',
+            password: 'any_password',
+            password_confirmation: 'any_password'
+        }
+    };
+    const httpResponse = sut.handle(httpRequest);
+    expect(httpResponse.statusCode).toBe(500);
+    expect(httpResponse.body).toEqual(new InternalServerException());
   });
 });
