@@ -6,11 +6,20 @@ class EncrypterStub implements Encrypter {
         return new Promise(resolve => resolve('hashed_password'))
     }
 }
+
+const makeSut = () => {
+  const encrypterStub = new EncrypterStub();
+  const sut = new DbAddAccount(encrypterStub);
+  return{
+    sut, 
+    encrypterStub
+  }
+}
+
 describe('DbAddAccount Usecase', () => {
   test('Should call encrypter with correct password', () => {
-    const encryptStub = new EncrypterStub()
-    const sut = new DbAddAccount(encryptStub);
-    const encryptSpy = jest.spyOn(encryptStub, 'encrypt');
+    const {sut, encrypterStub} = makeSut();
+    const encryptSpy = jest.spyOn(encrypterStub, 'encrypt');
     const accountData = {
         name: 'valid_name',
         email: 'valid_email',
