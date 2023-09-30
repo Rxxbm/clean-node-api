@@ -15,7 +15,7 @@ class AddAccountRepositoryStub implements AddAccountRepository{
       id: 'valid_id',
       name: 'valid_name',
       email: 'valid_email',
-      password: 'valid_password'
+      password: 'hashed_password'
     }; 
     return new Promise(resolve => resolve(fakeAccount));
    }
@@ -66,7 +66,7 @@ describe('DbAddAccount Usecase', () => {
     expect(spyAdd).toHaveBeenCalledWith({
       name: 'valid_name',
       email: 'valid_email',
-      password: 'valid_password'
+      password: 'hashed_password'
     });
   });
 });
