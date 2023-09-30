@@ -11,7 +11,7 @@ export class DbAddAccount implements AddAccount {
             ...data,
             password: hashed_password
         }
-        await this.addAccountRepository.add(account_with_hashed_password);
-        return new Promise(resolve => resolve(null));
+        const account = await this.addAccountRepository.add(account_with_hashed_password);
+        return account;
     }
 }
