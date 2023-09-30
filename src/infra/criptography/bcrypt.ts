@@ -3,7 +3,7 @@ import { hash } from 'bcrypt';
 export class BcryptAdapter implements Encrypter {
     constructor(private readonly salt: number){}
     async encrypt(password: string): Promise<string> {
-        await hash(password, this.salt);         
-        return new Promise(resolve => resolve(''));
+        const hashed_password = await hash(password, this.salt);         
+        return hashed_password;
     }
 }
