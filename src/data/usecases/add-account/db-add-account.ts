@@ -6,8 +6,12 @@ import { AddAccountRepository } from "../../repositories/add-acount-repository";
 export class DbAddAccount implements AddAccount {
     constructor(private readonly encrypter: Encrypter, private readonly addAccountRepository: AddAccountRepository){}
     async add(data: AddAccountModel): Promise<AccountModel> {
-        await this.encrypter.encrypt(data.password);
-        await this.addAccountRepository.add(data);
+        const hashed_password = await this.encrypter.encrypt(data.password);
+        const account_with_hashed_password: AddAccountModel = {
+            ...data,
+            password: hashed_password
+        }
+        await this.addAccountRepository.add(account_with_hashed_password);
         return new Promise(resolve => resolve(null));
     }
 }
