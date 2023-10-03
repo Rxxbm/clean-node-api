@@ -1,7 +1,7 @@
 import * as request from 'supertest';
 import * as dotenv from 'dotenv';
 import app from '../config/app';
-import { MongoHelper } from 'infra/db/helpers/mongo-helper';
+import { MongoHelper } from '../../infra/db/helpers/mongo-helper';
 
 describe('SignUp Route', () => {
   dotenv.config();
@@ -20,10 +20,10 @@ describe('SignUp Route', () => {
   }),
 
   test('Should return an account on success', async () => {
-    await request(app).post('/api/sign-up')
+    await request(app).post('/api/signup')
     .send({
         name: 'any_name',
-        email: 'any_email',
+        email: 'any_email@mail.com',
         password: 'any_password',
         password_confirmation: 'any_password'
     }).expect(200);

@@ -1,7 +1,7 @@
-import { Request, Response, Router } from 'express';
+import { Router } from 'express';
+import { adaptRoute } from '../adapters/express-route-adapter';
+import { makeSignUpController } from '../factories/sign-up';
 
 export const SignUpRoute = (router: Router): void => {
-    router.post('/sign-up', (req: Request, res: Response) => {
-        res.send({ok: 'ok'});
-    });
+    router.post('/signup', adaptRoute(makeSignUpController()));
 }
